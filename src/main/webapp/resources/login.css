@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+.logo {
+    width: 40px;
+    height: 40px;
+    float: left;
+}
+
+.btnauth {
+    width: 108px;
+}
+
+.col2 {
+    padding-left: 3em;
+}
+
+#random {
+    width: 512px
+}
+
+.drow {
+    padding-top: 8px;
+}
