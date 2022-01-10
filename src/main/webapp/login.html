@@ -11,11 +11,14 @@
 <script type="text/javascript" src="resources/pnxclient.js"></script>
 <script type="text/javascript" src="resources/signature.js"></script>
 <script type="text/javascript" src="resources/pkilogin.js"></script>
+<!-- compatible IE -->
+<script type="text/javascript" src="resources/browser.min.js"></script>
+<script type="text/javascript" src="resources/polyfill.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="resources/login.css" />
 </head>
 <body>
-    <form id="frmAuth" action="http://localhost:8080/gateway-springboot/authenticate">
+    <form id="frmAuth" action="http://localhost/gateway-springboot/authenticate">
     <div id="example-2">
         <div class="col2">
             <img class="logo" alt="logo" src="resources/logo.png">
@@ -45,14 +48,14 @@
 	var initParam = "<\?xml version=\"1.0\" encoding=\"utf-8\"\?><authinfo><liblist><lib type=\"PM\" version=\"1.0\" dllname=\"Q3J5cHRPY3guZGxs\"><algid val=\"SHA1\" sm2_hashalg=\"SM3\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IEVuaGFuY2VkIENyeXB0b2dyYXBoaWMgUHJvdmlkZXIgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IFN0cm9uZyBDcnlwdG9ncmFwaGljIFByb3ZpZGVy\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RW50ZXJTYWZlIGVQYXNzMzAwMyBDU1AgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"SklUIFVTQiBLZXkgQ1NQIHYxLjA=\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RW50ZXJTYWZlIGVQYXNzMjAwMSBDU1AgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"SklUIFVTQiBLZXkzMDAzIENTUCB2MS4w\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IEJhc2UgQ3J5cHRvZ3JhcGhpYyBQcm92aWRlciB2MS4w\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RkVJVElBTiBlUGFzc05HIFJTQSBDcnlwdG9ncmFwaGljIFNlcnZpY2UgUHJvdmlkZXI=\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RkVJVElBTiBlUGFzc05HIENTUCBGb3IgSklUM0sgVjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"SKF\" version=\"1.1\" dllname=\"U2h1dHRsZUNzcDExXzMwMDBHTS5kbGw=\"><algid val=\"SHA1\" sm2_hashalg=\"SM3\" /></lib></liblist></authinfo>";
 	var example2 = new Vue({
 		el : '#example-2',
-		data () {
+		data : function () {
 		    return {
 		      attrs: null,
 		      original: null
 		    }
 		},
-		mounted () {
-		    axios.get('http://localhost:8080/gateway-springboot/random')
+		mounted : function() {
+		    axios.get('http://localhost/gateway-springboot/random')
 		      .then(function(resp){
 		    	  example2._data.original = resp.data.random;
 		      })
