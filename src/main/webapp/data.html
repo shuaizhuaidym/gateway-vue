@@ -1,10 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>资源数据展示页面</title>
+
+<script type="text/javascript" src="resources/vue.js"></script>
+
+<script type="text/javascript" src="resources/axios_0.24.0.js"></script>
+<script type="text/javascript" src="resources/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript" src="resources/pnxclient.js"></script>
+<script type="text/javascript" src="resources/signature.js"></script>
+<!-- compatible IE -->
+<script type="text/javascript" src="resources/browser.min.js"></script>
+<script type="text/javascript" src="resources/polyfill.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="resources/login.css" />
+
 </head>
 <body>
-hello
+    <div id="result">
+        <div>{{success}}</div>
+        <div>{{token}}</div>
+        <div v-for="attr in attrs">{{ attr }}</div>
+    </div>
 </body>
+<script type="text/javascript">
+var example2 = new Vue({
+    el : '#result',
+    data : function () {
+        return {
+          success: null,
+          token: null,  
+          attrs: null,
+        }
+    },
+    mounted : function() {
+        var tk=localStorage.getItem('gateway_token');
+        const headers = {
+                'Content-Type': 'application/json',
+                'gateway_token': tk,
+              };
+        axios.get('http://localhost/gateway-springboot/data',{headers})
+          .then(function(resp){
+              example2._data.original = resp.data.success;
+              example2._data.token = resp.data.token;
+              example2._data.attrs = resp.data.attributes;
+          })
+          .catch(function (error) { // 请求失败处理
+              alert(error);
+          });
+    },
+    // 在 methods 对象中定义方法
+    methods : {
+        //TODO
+    }
+});
+</script>
 </html>

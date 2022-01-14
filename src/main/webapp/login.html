@@ -11,7 +11,6 @@
 
 <script type="text/javascript" src="resources/pnxclient.js"></script>
 <script type="text/javascript" src="resources/signature.js"></script>
-<script type="text/javascript" src="resources/pkilogin.js"></script>
 <!-- compatible IE -->
 <script type="text/javascript" src="resources/browser.min.js"></script>
 <script type="text/javascript" src="resources/polyfill.min.js"></script>
@@ -36,14 +35,14 @@
             <input id="pinCode" name="pinCode" type="hidden" value="false" />
         </div>
         <div class="col2 drow">
-            <input type="button" id="btnprepare" v-on:click="pkilogin" value="生成数据" class="btnauth"/> 
-            <input type="submit" id="btnauth" value="提交认证" class="btnauth"/>
+            <input type="button" id="btnprepare" v-on:click="pkilogin" value="PKI认证" class="btnauth"/> 
         </div>
     </div>
     </form>
    
 </body>
 <script type="text/javascript">
+
 	var initParam = "<\?xml version=\"1.0\" encoding=\"utf-8\"\?><authinfo><liblist><lib type=\"PM\" version=\"1.0\" dllname=\"Q3J5cHRPY3guZGxs\"><algid val=\"SHA1\" sm2_hashalg=\"SM3\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IEVuaGFuY2VkIENyeXB0b2dyYXBoaWMgUHJvdmlkZXIgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IFN0cm9uZyBDcnlwdG9ncmFwaGljIFByb3ZpZGVy\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RW50ZXJTYWZlIGVQYXNzMzAwMyBDU1AgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"SklUIFVTQiBLZXkgQ1NQIHYxLjA=\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RW50ZXJTYWZlIGVQYXNzMjAwMSBDU1AgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"SklUIFVTQiBLZXkzMDAzIENTUCB2MS4w\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IEJhc2UgQ3J5cHRvZ3JhcGhpYyBQcm92aWRlciB2MS4w\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RkVJVElBTiBlUGFzc05HIFJTQSBDcnlwdG9ncmFwaGljIFNlcnZpY2UgUHJvdmlkZXI=\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RkVJVElBTiBlUGFzc05HIENTUCBGb3IgSklUM0sgVjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"SKF\" version=\"1.1\" dllname=\"U2h1dHRsZUNzcDExXzMwMDBHTS5kbGw=\"><algid val=\"SHA1\" sm2_hashalg=\"SM3\" /></lib></liblist></authinfo>";
 	var example2 = new Vue({
 		el : '#example-2',
@@ -69,23 +68,24 @@
 		methods : {
 			pkilogin : function() {
                 var _this = this;
-                var sig = login(initParam, example2._data.original);
-                alert(sig);
+                var sig = detachSignStr(initParam, example2._data.original, "");
+                example2._data.signature = sig;
 			    const params = {
 	                    'original':_this.original,
 	                    'signature':sig,
 	                    'authMode':'cert',
 	                    'pinCode':'false'
 	            };
-			    const headers = { 
-                    /* 'Content-type': 'application/x-www-form-urlencoded' */
-			    };
-			    axios.post('http://localhost/gateway-springboot/authenticate', params, {headers}).then(function(resp){
-	                alert(resp.data.token);
+			    axios.post('http://localhost/gateway-springboot/authenticate', params).then(function(resp){
+			        if(resp.data.messageState=='false'){
+			            localStorage.setItem('gateway_token',resp.data.token);
+    	                window.location="data.html?token="+resp.data.token;
+			        }else{
+			            alert("Authenticate failed,token is null!");
+			        }
 	            }).catch(function(ex){
 	                alert(ex);
 	            });
-				//login(initParam, $("#random").val());
 			}
 		}
 	});
