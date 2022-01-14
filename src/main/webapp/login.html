@@ -1,11 +1,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <title>基于VUE的报文认证示例</title>
 
 <script type="text/javascript" src="resources/vue.js"></script>
 
-<script type="text/javascript" src="resources/axios_0.24.0.min.js"></script>
+<script type="text/javascript" src="resources/axios_0.24.0.js"></script>
 <script type="text/javascript" src="resources/jquery-1.10.2.min.js"></script>
 
 <script type="text/javascript" src="resources/pnxclient.js"></script>
@@ -18,19 +19,19 @@
 <link rel="stylesheet" type="text/css" href="resources/login.css" />
 </head>
 <body>
-    <form id="frmAuth" action="http://localhost/gateway-springboot/authenticate">
+    <form id="frmAuth" action="http://localhost/gateway-springboot/authenticate" method="post">
     <div id="example-2">
         <div class="col2">
             <img class="logo" alt="logo" src="resources/logo.png">
             <h1>基于VUE的报文认证示例</h1>
         </div>
         <div class="drow">
-           	  随机数 
-           	 <input id="random" name="original" type="text" readonly  v-model="original" />
+                                  随机数 
+             <input id="random" name="original" type="text" readonly  v-model="original" />
         </div>
         <div class="drow">
-                                         签名值
-            <textarea id="signature" name="signed_data" rows="8" cols="128" readonly></textarea>
+                                 签名值
+            <textarea id="signature" name="signed_data" rows="8" cols="128" v-model="signature"></textarea>
             <input id="authMode" name="authMode" type="hidden" value="cert" /> 
             <input id="pinCode" name="pinCode" type="hidden" value="false" />
         </div>
@@ -40,9 +41,7 @@
         </div>
     </div>
     </form>
-    
-    <h1>认证结果</h1>
-	<div v-for="site in info">{{ attrs }}</div>
+   
 </body>
 <script type="text/javascript">
 	var initParam = "<\?xml version=\"1.0\" encoding=\"utf-8\"\?><authinfo><liblist><lib type=\"PM\" version=\"1.0\" dllname=\"Q3J5cHRPY3guZGxs\"><algid val=\"SHA1\" sm2_hashalg=\"SM3\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IEVuaGFuY2VkIENyeXB0b2dyYXBoaWMgUHJvdmlkZXIgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IFN0cm9uZyBDcnlwdG9ncmFwaGljIFByb3ZpZGVy\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RW50ZXJTYWZlIGVQYXNzMzAwMyBDU1AgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"SklUIFVTQiBLZXkgQ1NQIHYxLjA=\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RW50ZXJTYWZlIGVQYXNzMjAwMSBDU1AgdjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"SklUIFVTQiBLZXkzMDAzIENTUCB2MS4w\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"TWljcm9zb2Z0IEJhc2UgQ3J5cHRvZ3JhcGhpYyBQcm92aWRlciB2MS4w\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RkVJVElBTiBlUGFzc05HIFJTQSBDcnlwdG9ncmFwaGljIFNlcnZpY2UgUHJvdmlkZXI=\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"CSP\" version=\"1.0\" dllname=\"RkVJVElBTiBlUGFzc05HIENTUCBGb3IgSklUM0sgVjEuMA==\"><algid val=\"SHA1\" sm2_hashalg=\"SHA1\" /></lib><lib type=\"SKF\" version=\"1.1\" dllname=\"U2h1dHRsZUNzcDExXzMwMDBHTS5kbGw=\"><algid val=\"SHA1\" sm2_hashalg=\"SM3\" /></lib></liblist></authinfo>";
@@ -50,8 +49,11 @@
 		el : '#example-2',
 		data : function () {
 		    return {
+		      authMode: 'cert',  
 		      attrs: null,
-		      original: null
+		      original: null,
+		      signature: null,
+              pinCode: 'false'
 		    }
 		},
 		mounted : function() {
@@ -66,7 +68,24 @@
 		// 在 methods 对象中定义方法
 		methods : {
 			pkilogin : function() {
-				login(initParam, $("#random").val());
+                var _this = this;
+                var sig = login(initParam, example2._data.original);
+                alert(sig);
+			    const params = {
+	                    'original':_this.original,
+	                    'signature':sig,
+	                    'authMode':'cert',
+	                    'pinCode':'false'
+	            };
+			    const headers = { 
+                    /* 'Content-type': 'application/x-www-form-urlencoded' */
+			    };
+			    axios.post('http://localhost/gateway-springboot/authenticate', params, {headers}).then(function(resp){
+	                alert(resp.data.token);
+	            }).catch(function(ex){
+	                alert(ex);
+	            });
+				//login(initParam, $("#random").val());
 			}
 		}
 	});
