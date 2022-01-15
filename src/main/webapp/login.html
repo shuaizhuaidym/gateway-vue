@@ -77,9 +77,9 @@
 	                    'pinCode':'false'
 	            };
 			    axios.post('http://localhost/gateway-springboot/authenticate', params).then(function(resp){
-			        if(resp.data.messageState=='false'){
-			            localStorage.setItem('gateway_token',resp.data.token);
-    	                window.location="data.html?token="+resp.data.token;
+			        if(resp.data.messageState == 'false'){
+			            localStorage.setItem('gateway_token', resp.data.token);
+    	                window.location = "data.html";
 			        }else{
 			            alert("Authenticate failed,token is null!");
 			        }
