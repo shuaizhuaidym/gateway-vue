@@ -83,8 +83,8 @@ var example2 = new Vue({
               example2._data.success = resp.data.success;
               example2._data.token = resp.data.token;
               example2._data.attrs = resp.data.attributes;
-              messageCode = resp.data.messageCode;
-              messageDesc = resp.data.messageDesc;
+              example2._data.messageCode = resp.data.messageCode;
+              example2._data.messageDesc = resp.data.messageDesc;
           })
           .catch(function (error) { // 请求失败处理
               alert(error);
