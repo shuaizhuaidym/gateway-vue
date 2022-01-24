@@ -13,8 +13,8 @@
     padding-left: 3em;
 }
 
-#random {
-    width: 512px
+#random,#signature {
+    width: 1024px
 }
 
 .drow {

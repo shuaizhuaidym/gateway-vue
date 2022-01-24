@@ -30,7 +30,7 @@
         </div>
         <div class="drow">
                                  签名值
-            <textarea id="signature" name="signed_data" rows="8" cols="128" v-model="signature"></textarea>
+            <textarea id="signature" name="signed_data" rows="10" cols="128" v-model="signature"></textarea>
             <input id="authMode" name="authMode" type="hidden" value="cert" /> 
             <input id="pinCode" name="pinCode" type="hidden" value="false" />
         </div>
@@ -81,7 +81,7 @@
 			            localStorage.setItem('gateway_token', resp.data.token);
     	                window.location = "data.html";
 			        }else{
-			            alert("Authenticate failed,token is null!");
+			            alert("["+resp.data.messageCode+"]"+resp.data.messageDesc);
 			        }
 	            }).catch(function(ex){
 	                alert(ex);
