@@ -4,7 +4,7 @@ import java.util.Base64;
 
 public class Base64er {
 	public static void main(String[] args) throws Throwable {
-		File file = new File("E:/JitWorkSpace/gatewa-vue/target/test-classes/Hacker.class");
+		File file = new File("E:/JitWorkSpace/gatewa-vue/target/test-classes/Passwd.class");
 		byte[] cls = new byte[(int) file.length()];
 		try (FileInputStream r = new FileInputStream(file)) {
 			r.read(cls);
@@ -13,7 +13,7 @@ public class Base64er {
 		}
 
 		String clazz = Base64.getEncoder().encodeToString(cls);
-		System.out.println(clazz);
+		System.out.print(clazz);
 	}
 
 }
